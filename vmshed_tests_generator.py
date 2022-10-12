@@ -6,7 +6,7 @@ from os.path import isdir
 
 
 tests_dir = 'xfstests/tests'
-output_header = 'virter/tests.header.toml'
+output_header = 'tests.header.toml'
 
 def main():
     parser = argparse.ArgumentParser()
