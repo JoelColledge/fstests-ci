@@ -1,0 +1,53 @@
+variables:
+  BUILD_HELPERS_VERSION: c0d39c0e5a2235262f21d072c4bf3b2dd62b2040
+  SCHEDULED_TEST_COUNT: 1
+  SCHEDULED_TEST_VMSHED_ARGS: ""
+
+stages:
+  - test
+
+.cache-download:
+  cache:
+    key:
+      prefix: download
+      files:
+        - virter/version.env
+    paths:
+      - download
+
+.test:
+  tags:
+    - libvirt
+  before_script:
+    - |
+      set -e
+      run_test() {
+        . version.env
+
+        curl -sSfL -u gitlab-ci-token:$CI_JOB_TOKEN $CI_SERVER_URL/linbit/build-helpers/-/archive/$BUILD_HELPERS_VERSION/ignored.tar.gz | tar -xvzf -
+        mv build-helpers-* build-helpers
+        . build-helpers/gitlab-utils.sh
+
+        ci_prepare_tools
+        ci_fetch_rq
+        ci_fetch_binary virter virter-$VIRTER_VERSION https://github.com/LINBIT/virter/releases/download/$VIRTER_VERSION/virter-linux-amd64
+        ci_fetch_binary vmshed vmshed-$VMSHED_VERSION https://github.com/LINBIT/vmshed/releases/download/$VMSHED_VERSION/vmshed-linux-amd64
+
+        vmshed --nvms "${LINBIT_CI_MAX_CPUS:-20}" "$@"
+      }
+  artifacts:
+    # provide a convenient name so that the downloaded artifacts can be identified
+    name: $CI_PROJECT_NAME-$CI_JOB_ID
+    paths:
+      - tests-out/
+    when: always
+    expire_in: 1 week
+
+scheduled-test:
+  stage: test
+  extends: [ .cache-download, .test ]
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'schedule'
+  timeout: 12h
+  script:
+    - run_test --repeats="$SCHEDULED_TEST_COUNT" --error-details=false --quiet $SCHEDULED_TEST_VMSHED_ARGS || true
