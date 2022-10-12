@@ -5,7 +5,7 @@ provision_timeout = "15m"
 
 
 [[vms]]
-base_image = "ubuntu-jammy-fstests"
+base_image = "ubuntu-jammy"
 vcpus = 1
 memory = "1G"
 disks = ["name=test,size=10G,bus=scsi", "name=scratch,size=10G,bus=scsi"]
