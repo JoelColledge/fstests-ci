@@ -1,0 +1,9 @@
+[[steps]]
+[steps.shell]
+script = '''
+set -e
+git clone git://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git
+cd xfstests-dev
+make
+sudo make install
+'''

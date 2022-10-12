@@ -1,0 +1,68 @@
+# Disable SELinux
+[[steps]]
+[steps.shell]
+script = """
+if command -v setenforce > /dev/null; then
+	echo "Disabling SELinux"
+	setenforce 0
+	sed -i 's/^SELINUX=.*/SELINUX=disabled/' /etc/selinux/config
+fi
+"""
+
+# Configure kernel parameters
+[[steps]]
+[steps.shell]
+script = """
+# linbit network routes IPv6 traffic over a slow link, so disable it
+echo net.ipv6.conf.all.disable_ipv6=1 >> /etc/sysctl.conf
+echo net.ipv6.conf.default.disable_ipv6=1 >> /etc/sysctl.conf
+
+# log everything to the console
+echo 'kernel.printk = 8 8 8 8' >> /etc/sysctl.conf
+
+sysctl -p
+"""
+
+# Disable unwanted services
+[[steps]]
+[steps.shell]
+script = """
+# Disable unnecessary updates
+units="unattended-upgrades.service apt-daily.timer apt-daily-upgrade.timer"
+
+# Disable services which fail anyway
+units="$units kdump.service postfix.service"
+
+for u in $units; do
+	if systemctl list-unit-files | grep -Fq $u; then
+		systemctl disable --now $u
+	fi
+done
+"""
+
+# Uninstall snapd
+[[steps]]
+[steps.shell]
+script = """
+if command -v snap > /dev/null; then
+	apt-get purge snapd
+fi
+"""
+
+[[steps]]
+[steps.shell]
+script = '''
+set -e
+
+apt-get -y update
+apt-get -y install acl attr automake bc dbench dump e2fsprogs fio gawk \
+        gcc git indent libacl1-dev libaio-dev libcap-dev libgdbm-dev libtool \
+        libtool-bin liburing-dev libuuid1 lvm2 make psmisc python3 quota sed \
+        uuid-dev uuid-runtime xfsprogs linux-headers-$(uname -r) sqlite3
+
+apt-get -y install exfatprogs f2fs-tools ocfs2-tools udftools xfsdump \
+        xfslibs-dev
+'''
+
+[steps.shell.env]
+DEBIAN_FRONTEND = "noninteractive"

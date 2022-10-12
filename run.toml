@@ -1,0 +1,26 @@
+[[steps]]
+[steps.shell]
+script = '''
+set -e
+
+mkfs.xfs /dev/sda
+
+mkdir -p /mnt/test && mount /dev/sda /mnt/test
+mkdir -p /mnt/scratch
+
+useradd -m fsgqa
+useradd 123456-fsgqa
+useradd fsgqa2
+#groupadd fsgqa
+
+cd xfstests-dev
+
+cat << EOF > local.config
+export TEST_DEV=/dev/sda
+export TEST_DIR=/mnt/test
+export SCRATCH_DEV=/dev/sdb
+export SCRATCH_MNT=/mnt/scratch
+EOF
+
+./check "$TEST_NAME"
+'''

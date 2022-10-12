@@ -1,0 +1,11 @@
+# This is appended to the base image name to form the test image name
+name = "t"
+provision_file = "provision-test.toml"
+provision_timeout = "15m"
+
+
+[[vms]]
+base_image = "ubuntu-jammy-fstests"
+vcpus = 1
+memory = "1G"
+disks = ["name=test,size=10G,bus=scsi", "name=scratch,size=10G,bus=scsi"]
