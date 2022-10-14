@@ -22,5 +22,6 @@ export SCRATCH_DEV=/dev/sdb
 export SCRATCH_MNT=/mnt/scratch
 EOF
 
+# Convert any '_' back to '/'
 ./check "${TEST_NAME//_/\/}"
 '''

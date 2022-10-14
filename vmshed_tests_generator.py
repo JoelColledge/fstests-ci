@@ -31,6 +31,7 @@ def main():
 
     # Write tests
     for name in sorted(test_names):
+        # Replace '/' with '_' to create a valid toml key
         print('[tests.{}]'.format(name.replace('/', '_')))
         print('vms = [1]')
         print()
