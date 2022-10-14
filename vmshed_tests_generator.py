@@ -5,12 +5,15 @@ import argparse
 from os.path import isdir
 
 
-tests_dir = 'xfstests/tests'
 output_header = 'tests.header.toml'
 
 def main():
     parser = argparse.ArgumentParser()
+    parser.add_argument('fstests_path', metavar='fstests-path',
+            help='path to (x)fstests directory')
     args = parser.parse_args()
+
+    tests_dir = args.fstests_path + '/tests'
 
     # Read test files
     test_names = []
