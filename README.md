@@ -29,13 +29,15 @@ Re-generate the list of tests:
 ./vmshed_tests_generator.py <path-to-xfstests> > tests.toml
 ```
 
-Run one specific test (run in this directory):
+Run one specific test. This must be run in this directory. Adjust `--nvms` to
+the number of VMs that should be started concurrently, typically the number of
+CPUs available.
 
 ```
 vmshed --nvms 8 --torun xfs_156
 ```
 
-Run all tests (run in this directory):
+Run all tests:
 
 ```
 vmshed --nvms 8
@@ -54,3 +56,5 @@ The output from the tests will be written to the directory `tests-out`.
 * Test other filesystems.
 * Run test groups from fstests.
 * Test kernels other than the stock one.
+* Run multiple fstests tests in each VM. For instance, tests that are known to
+  be fast and stable could be grouped together.
