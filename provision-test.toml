@@ -67,6 +67,13 @@ git clone git://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git
 cd xfstests-dev
 make
 sudo make install
+
+mkdir -p /mnt/test
+mkdir -p /mnt/scratch
+
+useradd -m fsgqa
+useradd 123456-fsgqa
+useradd fsgqa2
 '''
 
 [steps.shell.env]

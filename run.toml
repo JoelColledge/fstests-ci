@@ -3,15 +3,9 @@
 script = '''
 set -e
 
+# Format and mount "test" volume
 mkfs.xfs /dev/sda
-
-mkdir -p /mnt/test && mount /dev/sda /mnt/test
-mkdir -p /mnt/scratch
-
-useradd -m fsgqa
-useradd 123456-fsgqa
-useradd fsgqa2
-#groupadd fsgqa
+mount /dev/sda /mnt/test
 
 cd xfstests-dev
 
