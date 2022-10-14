@@ -42,3 +42,15 @@ vmshed --nvms 8
 ```
 
 The output from the tests will be written to the directory `tests-out`.
+
+## Improvements
+
+* Only run tests that are expected to succeed.
+* Prepare a special base image in advance with the packages already installed.
+  Currently `provision-test.toml` does everything necessary to set up the VM
+  from a stock Ubuntu 22.04 image. Most of these steps can be performed in
+  advance rather than for every test run. This would reduce the time required
+  for the provisioning step.
+* Test other filesystems.
+* Run test groups from fstests.
+* Test kernels other than the stock one.
