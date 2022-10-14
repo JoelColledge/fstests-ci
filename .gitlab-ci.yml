@@ -29,7 +29,6 @@ stages:
         . build-helpers/gitlab-utils.sh
 
         ci_prepare_tools
-        ci_fetch_rq
         ci_fetch_binary virter virter-$VIRTER_VERSION https://github.com/LINBIT/virter/releases/download/$VIRTER_VERSION/virter-linux-amd64
         ci_fetch_binary vmshed vmshed-$VMSHED_VERSION https://github.com/LINBIT/vmshed/releases/download/$VMSHED_VERSION/vmshed-linux-amd64
 
